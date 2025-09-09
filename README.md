@@ -1,0 +1,2 @@
+# Item_Master_Numbering_Request_Tool
+品目マスタの採番依頼のツール
