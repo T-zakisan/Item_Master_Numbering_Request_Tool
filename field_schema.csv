@@ -1,0 +1,145 @@
+﻿項目名 , 旧表記 , 資材_mode , 部品センター_mode , 技術_mode , 採番担当_mode , 資材_required , 部品センター_required , 技術_required , 採番担当_required , 資材_default , 部品センター_default , 技術_default , 採番担当_default
+品目区分 ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  , C , 5 , 5 , 5
+品目ｺｰﾄﾞ , 部品番号 , fixed , fixed , fixed , entry ,  ,  ,  , 1 ,  ,  ,  , 
+品目名1 , 部品名称 , entry , entry , entry , entry , 1 , 1 , 1 , 1 ,  ,  ,  , 
+品目名2 , 部品型式 , entry , entry , entry , entry , 1 , 1 , 1 , 1 ,  ,  ,  , 
+品目名3 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+品目名4 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+標準単位 , 数量単位コード , dropdown , dropdown , dropdown , dropdown , 1 , 1 , 1 , 1 ,  ,  ,  , 
+略称ｶﾅ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+型番 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+標準単価 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+販売単価 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価A ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価B ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価C ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価D ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価E ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価F ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価G ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価H ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価I ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価J ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価K ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価L ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価M ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+ﾗﾝｸ単価N ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+取引先ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+科目ｺｰﾄﾞ ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  , DA0300 , DA0300 , DA0300 , DA0300
+科目ｺｰﾄﾞ2 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+在庫管理区分 ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  , 2 , 2 , 2 , 2
+調達区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+機械ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+場所ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+ﾛｹｰｼｮﾝ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+製造手配区分 ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  , 3 : ﾏﾆｭｱﾙ手配品目 , 0 : ﾛｯﾄ手配品目 , 0 : ﾛｯﾄ手配品目 , 0 : ﾛｯﾄ手配品目
+分類1 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+分類2 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+分類3 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+分類4 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+分類5 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+分類6 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+図面番号 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+計画製番ｶｳﾝﾀｰ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+管理区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+支給区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+税額区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+検査区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+留意区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+ﾛｯﾄ管理区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+製番毎計算区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+員数単位 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+員数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+員数計算 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+基準在庫数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+最低在庫数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+製造ﾛｯﾄ数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+製造最大ﾛｯﾄ数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+製造LT ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.0 , 0.0 , 0.0 , 0.0
+LLC ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+仕損数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.0 , 0.0 , 0.0 , 0.0
+期間算定値 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+計算区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+材質ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+寸法1 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.000 , 0.000 , 0.000 , 0.000
+寸法2 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.000 , 0.000 , 0.000 , 0.000
+寸法3 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.000 , 0.000 , 0.000 , 0.000
+寸法4 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.000 , 0.000 , 0.000 , 0.000
+比重 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.000000000 , 0.000000000 , 0.000000000 , 0.000000000
+単位重量 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+注文書不要 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+無効 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+所要量計算端数区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+支給ﾛｯﾄ数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+まとめ区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+まとめ休日前後ﾌﾗｸﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+まとめ曜日1 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+まとめ曜日2 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+まとめ曜日3 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+まとめ日1 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+まとめ日2 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+まとめ日3 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+荷姿入数 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+荷姿単位 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+通常ﾚｽ率 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+出荷可能日数 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備数値3 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値4 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+販売単価掛率 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値6 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値7 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値8 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値9 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+予備数値10 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0.00 , 0.00 , 0.00 , 0.00
+営業所ｺｰﾄﾞ ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  ,  ,  ,  , 
+ﾄﾗｸﾀｰ品目ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+ｽｸﾘｰﾄﾞ品目ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+改定No ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備半角5 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備半角6 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備半角7 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+機歴用品目ｺｰﾄﾞ ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備半角9 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備半角10 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+備考 ,  , entry , entry , entry , entry ,  ,  ,  ,  ,  ,  ,  , 
+備考2 ,  , entry , entry , entry , entry ,  ,  ,  ,  ,  ,  ,  , 
+備考3 ,  , entry , entry , entry , entry ,  ,  ,  ,  ,  ,  ,  , 
+備考4 ,  , entry , entry , entry , entry ,  ,  ,  ,  ,  ,  ,  , 
+英語型番 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+英語品目名 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+製造国 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備全角8 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備全角9 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備全角10 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付1 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付2 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付3 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付4 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付5 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付6 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付7 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付8 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付9 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備日付10 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+号機ｴﾝｼﾞﾝ区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+売上一覧表用分類 ,  , dropdown , dropdown , dropdown , dropdown , 1 , 1 , 1 , 1 ,  ,  ,  , 
+売上一覧表用並び順 ,  , fixed , fixed , fixed , fixed ,  ,  ,  ,  , 999 , 999 , 999 , 999
+商品分類用並び順 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+商品別売上実績用並び順 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+access用 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+機歴用品目区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備区分8 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備区分9 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+予備区分10 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+製品ｺｰﾄﾞ必須 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+品目名変更可能 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+定価変更可能 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+一括売上対象 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ5 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ6 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ7 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ8 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ9 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+予備ﾌﾗｸﾞ10 ,  , hide , hide , hide , hide ,  ,  ,  ,  , 0 , 0 , 0 , 0
+税率区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  ,  ,  ,  , 
+処理区分 ,  , hide , hide , hide , hide ,  ,  ,  ,  , U , U , U , U
