@@ -1,13 +1,26 @@
-# test_04(更新_9).py
+# test_04(更新_13).py
 import json, os, re, csv
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 import tkinter.font as tkfont
 from datetime import datetime
+import sys, subprocess
 
 YOUR_APP_NAME="DennoFactoryApp"
-SCHEMA_PATH = r"V:\00.各個人用フォルダ\999.yamazaki\test\field_schema.csv"   # スキーマCSVの既定パス（共有フォルダ）
+#SCHEMA_PATH = r"V:\00.各個人用フォルダ\999.yamazaki\test\field_schema.csv"   # スキーマCSVの既定パス（共有フォルダ）
+# DEFAULT_SCHEMA_DIR  = r"V:\00.各個人用フォルダ\999.yamazaki\test"
+
+
+# SCHEMA_PATH = r"C:\Users\zakis\Downloads\品目マスター採番依頼ツール\field_schema.csv"   # スキーマCSVの既定パス（共有フォルダ）
+DEFAULT_SCHEMA_DIR  = r"C:\Users\zakis\Downloads\品目マスター採番依頼ツール"
+DEFAULT_SCHEMA_NAME = "field_schema.csv"
+UNITS_XLSX    = "標準単位.xlsx"
+SALESCAT_XLSX = "売上一覧表用分類.xlsx"
+
+# 添付ファイルの許可種
+ATT_ALLOWED = [("PDF/画像","*.pdf *.png *.jpg *.jpeg"), ("PDF","*.pdf"), ("画像","*.png *.jpg *.jpeg")]
+
 EMAIL_DOMAIN="@hantak.co.jp"
 DEPTS=["資材",  "部品センター",  "技術",  "技術受付",  "採番担当"]
 MENU_ITEMS=["新規",  "保存",  "取込",  "採番依頼",  "採番完了",  "CSV転送",  "設定"]
@@ -142,6 +155,9 @@ class App(tk.Tk):
         if self.settings is None:
             self.after(100,self.open_settings)
         else:
+            if "schema_dir"  not in self.settings:  self.settings["schema_dir"]  = DEFAULT_SCHEMA_DIR
+            if "schema_name" not in self.settings:  self.settings["schema_name"] = DEFAULT_SCHEMA_NAME
+            save_settings(self.settings)  # 上書き保存（任意）
             self.apply_settings()
             self.load_field_defs()
             self.load_dropdown_masters()
@@ -156,6 +172,79 @@ class App(tk.Tk):
         self.bind_all("<Escape>",               self._sc_clr)
         self.bind_all("<Control-s>",            self._sc_save)
         self.bind_all("<Control-o>",            self._sc_import)
+
+
+
+
+    def _attachments_refresh_ui(self):
+        if not hasattr(self, "att_list"): return
+        self.att_list.delete(0, "end")
+        for p in self.attach_files:
+            self.att_list.insert("end", Path(p).name)
+
+    def on_attach_add(self):
+        paths = filedialog.askopenfilenames(title="添付ファイルを選択", filetypes=ATT_ALLOWED)
+        if not paths: return
+        # 重複排除
+        newset = set(self.attach_files)
+        for p in paths:
+            if p: newset.add(p)
+        self.attach_files = list(newset)
+        self._attachments_refresh_ui()
+
+    def on_attach_del(self):
+        sel = list(self.att_list.curselection())
+        if not sel: return
+        # 下から削除
+        for i in reversed(sel):
+            try:
+                del self.attach_files[i]
+            except IndexError:
+                pass
+        self._attachments_refresh_ui()
+
+    def _open_file_safe(self, p:str):
+        try:
+            pp = Path(p)
+            if not pp.exists():
+                messagebox.showwarning("注意", f"ファイルが見つかりません:\n{p}")
+                return
+            if os.name == "nt":
+                os.startfile(str(pp))  # Windows
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(pp)])  # macOS
+            else:
+                subprocess.Popen(["xdg-open", str(pp)])  # Linux
+        except Exception as e:
+            messagebox.showerror("エラー", f"ファイルを開けませんでした:\n{p}\n{e}")
+
+    def on_attach_open(self):
+        sels = list(self.att_list.curselection())
+        if not sels:  # 選択なし → 行クリックのみのケース
+            i = 0 if self.attach_files else None
+            if i is None: return
+            self._open_file_safe(self.attach_files[i]); return
+        for i in sels:  # 複数選択時は全部開く
+            if 0 <= i < len(self.attach_files):
+                self._open_file_safe(self.attach_files[i])
+
+
+
+
+    # 左欄の表記
+    def render_left_list(self, keep_index: int|None=None):
+        self.listbox.delete(0, "end")
+        for i, r in enumerate(self.rows):
+            name = r.get("品目名1") or r.get("品目名2") or r.get("品目ｺｰﾄﾞ") or "(無題)"
+            self.listbox.insert("end", f"{i+1:03d} {trunc31(name)}")
+        if keep_index is not None and 0 <= keep_index < len(self.rows):
+            try:
+                self.listbox.selection_set(keep_index); self.listbox.see(keep_index)
+                self.cur_index = keep_index
+            except: pass
+        if hasattr(self, "_zebra_listbox"): self._zebra_listbox()
+
+
 
     def shortcuts_enabled(self)->bool:
         return bool((self.settings or {}).get("enable_shortcuts", False))
@@ -190,7 +279,8 @@ class App(tk.Tk):
     # # 項目定義CSVの読み込み（列A=新, 列B=旧, 列C=CSVキー）。ヘッダなし前提。
     def load_field_defs(self):
         if not self.load_schema():
-            messagebox.showerror("エラー", f"スキーマCSVが見つかりません:\n{SCHEMA_PATH}")
+            p = self.get_schema_path()
+            messagebox.showerror("エラー", f"スキーマCSVが見つかりません:\n{p}")
             self.after(100, self.destroy); return
         self.FIELDS   = [(r["項目名"], r.get("旧表記",""), r["項目名"])
                         for r in self.schema_rows if r.get("項目名")]
@@ -237,7 +327,11 @@ class App(tk.Tk):
 
 
     def get_schema_path(self):
-        return Path(SCHEMA_PATH)
+        s = self.settings or {}
+        d = Path(s.get("schema_dir",  DEFAULT_SCHEMA_DIR))
+        n =      s.get("schema_name", DEFAULT_SCHEMA_NAME)
+        return (d / n)
+        # return Path(SCHEMA_PATH)
 
     def load_schema(self)->bool:
         p = self.get_schema_path()
@@ -295,64 +389,73 @@ class App(tk.Tk):
 
     # Excelマスタの読込（openpyxl があれば使用）
     def load_dropdown_masters(self):
-        self.dropdown_values = DROPDOWN_DEFAULT.copy()
-        self.dropdown_export_map = {"標準単位":{}, "売上一覧表用分類":{}}
+        self.dropdown_values = {"標準単位": [], "売上一覧表用分類": []}
+        self.dropdown_export_map = {"標準単位": {}, "売上一覧表用分類": {}}
+
+        # openpyxl が無ければ既定メッセージ
         try:
-            import openpyxl  # 依存が無い場合は except へ
+            import openpyxl
         except Exception:
+            self.dropdown_values["標準単位"] = DROPDOWN_DEFAULT["標準単位"]
+            self.dropdown_values["売上一覧表用分類"] = DROPDOWN_DEFAULT["売上一覧表用分類"]
             return
-        s = self.settings or {}
-        # 標準単位
-        upath = s.get("units_master","")
-        if upath and Path(upath).exists():
+
+        base = Path((self.settings or {}).get("schema_dir", DEFAULT_SCHEMA_DIR))
+
+        # 標準単位.xlsx
+        upath = base / UNITS_XLSX
+        if upath.exists():
             try:
-                wb = openpyxl.load_workbook(upath, data_only=True)
-                ws = wb.active
-                vals=[]; mapping={}
-                for i,row in enumerate(ws.iter_rows(values_only=True), start=1):
-                    if i==1:  # ヘッダ行想定
-                        continue
-                    b = (row[1] or "") if len(row)>1 else ""
+                wb = openpyxl.load_workbook(upath, data_only=True); ws = wb.active
+                vals, mapping = [], {}
+                for i, row in enumerate(ws.iter_rows(values_only=True), start=1):
+                    if i == 1: continue
+                    b = (row[1] or "") if len(row) > 1 else ""
                     if b:
-                        # 「プルダウン表示, csv」形式に対応
                         if "," in str(b):
-                            disp, csvv = [x.strip() for x in str(b).split(",",1)]
+                            disp, csvv = [x.strip() for x in str(b).split(",", 1)]
                         else:
-                            disp, csvv = str(b).strip(), str(b).strip()
-                        vals.append(disp); mapping[disp]=csvv
+                            disp = csvv = str(b).strip()
+                        vals.append(disp); mapping[disp] = csvv
                 if vals:
-                    self.dropdown_values["標準単位"]=vals
-                    self.dropdown_export_map["標準単位"]=mapping
+                    self.dropdown_values["標準単位"] = vals
+                    self.dropdown_export_map["標準単位"] = mapping
             except Exception:
                 pass
-        # 売上一覧表用分類
-        spath = s.get("salescat_master","")
-        if spath and Path(spath).exists():
+
+        # 売上一覧表用分類.xlsx
+        spath = base / SALESCAT_XLSX
+        if spath.exists():
             try:
-                wb = openpyxl.load_workbook(spath, data_only=True)
-                ws = wb.active
-                vals=[]; mapping={}
-                for i,row in enumerate(ws.iter_rows(values_only=True), start=1):
-                    if i==1:
-                        continue
-                    a = (row[0] or "") if len(row)>0 else ""
-                    b = (row[1] or "") if len(row)>1 else ""
-                    disp = str(b).strip()
-                    csvv = str(a).strip()
+                wb = openpyxl.load_workbook(spath, data_only=True); ws = wb.active
+                vals, mapping = [], {}
+                for i, row in enumerate(ws.iter_rows(values_only=True), start=1):
+                    if i == 1: continue
+                    a = (row[0] or "") if len(row) > 0 else ""
+                    b = (row[1] or "") if len(row) > 1 else ""
+                    disp = str(b).strip(); csvv = str(a).strip()
                     if disp:
                         vals.append(disp)
-                        if csvv:
-                            mapping[disp]=csvv
+                        if csvv: mapping[disp] = csvv
                 if vals:
-                    self.dropdown_values["売上一覧表用分類"]=vals
-                    self.dropdown_export_map["売上一覧表用分類"]=mapping
+                    self.dropdown_values["売上一覧表用分類"] = vals
+                    self.dropdown_export_map["売上一覧表用分類"] = mapping
             except Exception:
                 pass
+
+        # ファイルが無い・空のときは既定メッセージにフォールバック
+        if not self.dropdown_values["標準単位"]:
+            self.dropdown_values["標準単位"] = DROPDOWN_DEFAULT["標準単位"]
+        if not self.dropdown_values["売上一覧表用分類"]:
+            self.dropdown_values["売上一覧表用分類"] = DROPDOWN_DEFAULT["売上一覧表用分類"]
+
+
 
 
     def _collect_form_row(self)->dict:
         dept = (self.settings or {}).get("department","資材")
         row = {}
+        row["__attachments"] = list(self.attach_files)  # 添付ファイル
         for _,_,csvkey in self.FIELDS:
             if csvkey=="製造手配区分" and (csvkey+"_raw") in self.vars:
                 row[csvkey] = self.vars[csvkey+"_raw"]
@@ -480,43 +583,6 @@ class App(tk.Tk):
         r += 1
 
 
-        # プルダウンマスタ
-        ttk.Label(frm,text="■プルダウンマスタ",style="JpBold.TLabel").grid(row=r,column=0,sticky="w",pady=(0,ROW_PAD_Y))
-        r += 1
-        # 標準単位
-        ttk.Label(frm,text="標準単位",style="Jp.TLabel").grid(row=r,column=0,sticky="w",pady=(0,ROW_PAD_Y))
-        units_var = tk.StringVar(value=(self.settings or {}).get("units_master",""))
-        def _fmt_path(p):
-            if not p: return ""
-            mtime = datetime.fromtimestamp(Path(p).stat().st_mtime).strftime("%Y.%m.%d")
-            return f"{Path(p).name} @ {mtime}"
-        ttk.Button(frm,text="ファイル選択",
-                    command=lambda: (lambda p=filedialog.askopenfilename(
-                        title="標準単位マスタを選択", filetypes=[("Excel","単位一覧*.xlsx")]):
-                        units_var.set(p) if p else None)(),
-                    style="Jp.TButton").grid(row=r,column=1,sticky="w",pady=(0,ROW_PAD_Y))
-        units_lbl = ttk.Label(frm,text=_fmt_path(units_var.get()), font=self.font_mono)
-        units_lbl.grid(row=r,column=2,sticky="w",pady=(0,ROW_PAD_Y))
-        def _upd_units_lbl(*_):
-            units_lbl.config(text=_fmt_path(units_var.get()))
-        units_var.trace_add("write", _upd_units_lbl)
-        r += 1
-
-        # 売上一覧表用分類
-        ttk.Label(frm,text="売上一覧表用分類",style="Jp.TLabel").grid(row=r,column=0,sticky="w",pady=(0,ROW_PAD_Y))
-        sales_var = tk.StringVar(value=(self.settings or {}).get("salescat_master",""))
-        ttk.Button(frm,text="ファイル選択",
-                    command=lambda: (lambda p=filedialog.askopenfilename(
-                        title="売上一覧表用分類マスタを選択", filetypes=[("Excel","売上一覧用分類*.xlsx")]):
-                        sales_var.set(p) if p else None)(),
-                    style="Jp.TButton").grid(row=r,column=1,sticky="w",pady=(0,ROW_PAD_Y))
-        sales_lbl = ttk.Label(frm,text=_fmt_path(sales_var.get()),font=self.font_mono)
-        sales_lbl.grid(row=r,column=2,sticky="w",pady=(0,ROW_PAD_Y))
-        def _upd_sales_lbl(*_):
-            sales_lbl.config(text=_fmt_path(sales_var.get()))
-        sales_var.trace_add("write", _upd_sales_lbl)
-        r += 1
-
 
 
         ttk.Label(frm,text="■その他",style="JpBold.TLabel").grid(row=r,column=0,sticky="w",pady=(0,ROW_PAD_Y))
@@ -561,8 +627,6 @@ class App(tk.Tk):
                     "department":dept_var.get(),
                     "output_dir":out_var.get(),
                     "employee_no": empno_var.get(),
-                    "units_master": units_var.get(),
-                    "salescat_master": sales_var.get(),
                     "show_old_alias": bool(show_old_var.get()),
                     "font_size":int(fs_var.get()),
                     "maximize_on_start":bool(max_var.get()),
@@ -704,6 +768,27 @@ class App(tk.Tk):
         if isinstance(w, tk.Entry):
             w.config(state=("normal" if mode_code == "entry" else "disabled"))
 
+
+        # 添付ファイル（ボタン行の直上）
+        self.attach_files = []          # 現在編集中レコードの添付パス配列
+        attf = ttk.LabelFrame(right, text="添付ファイル"); attf.grid(row=rowi, column=1, sticky="we", pady=(0,8))
+        attf.grid_columnconfigure(0, weight=1)
+
+        self.att_list = tk.Listbox(attf, height=4)
+        self.att_list.grid(row=0, column=0, sticky="we")
+        btns_att = ttk.Frame(attf); btns_att.grid(row=0, column=1, sticky="n", padx=(6,0))
+        ttk.Button(btns_att, text="追加",  command=self.on_attach_add, style="Jp.TButton").pack(fill="x", pady=(0,4))
+        ttk.Button(btns_att, text="削除",  command=self.on_attach_del,  style="Jp.TButton").pack(fill="x")
+        rowi += 1  # 添付枠を1行としてカウント
+
+        # 添付ファイルのWクリックのバインド
+        # self.att_list = tk.Listbox(attf, height=4)
+        # self.att_list.grid(row=0, column=0, sticky="we")
+        # self.att_list.bind("<Double-Button-1>", lambda e: self.on_attach_open())  # 追加
+        self.att_list.bind("<Double-Button-1>", lambda e: self.on_attach_open())  # 追加
+
+
+
         # 下部操作ボタン
         btns=ttk.Frame(right)
         btns.grid(row=rowi, column=1, sticky="w", pady=(12,0))  # 入力欄と同じ列=1、左寄せ
@@ -715,11 +800,15 @@ class App(tk.Tk):
         right.grid_columnconfigure(0,weight=0); right.grid_columnconfigure(1,weight=1)
         self.refresh_fonts()
         self._zebra_listbox()
+        self.render_left_list(keep_index=self.cur_index)
 
     # 左選択
     def on_select_row(self, _evt=None):
         if not self.listbox.curselection(): return
         idx=self.listbox.curselection()[0]; self.cur_index=idx; row=self.rows[idx]
+        # 添付ファイル
+        self.attach_files = list(self.rows[idx].get("__attachments", []))
+        self._attachments_refresh_ui()
         for _,_,csvkey in self.FIELDS:
             if csvkey in self.vars:
                 val = row.get(csvkey,"")
@@ -780,15 +869,10 @@ class App(tk.Tk):
             messagebox.showinfo("情報","全項目が一致する行があるため追加をスキップしました"); return
 
         self.rows.append(row)
-        self.listbox.insert("end", self._disp_text(row))
-        self.cur_index = len(self.rows)-1
-        try:
-            self.listbox.selection_clear(0,"end")
-            self.listbox.selection_set(self.cur_index)
-            self.listbox.see(self.cur_index)
-        except: pass
-        if hasattr(self, "_zebra_listbox"): self._zebra_listbox()
+        self.cur_index = len(self.rows) - 1
+        self.render_left_list(keep_index=self.cur_index)
         self._focus_name1() # カーソルを品目名1へ
+        self.attach_files=[]; self._attachments_refresh_ui()    # 添付リストリセット
         messagebox.showinfo("情報","追加しました")
 
 
@@ -797,9 +881,10 @@ class App(tk.Tk):
         idx = self._get_selected_index()
         if idx is None:
             messagebox.showwarning("注意","削除対象を選択してください"); return
-        del self.rows[idx]; self.listbox.delete(idx)
-        self.cur_index=None; self.on_clear()
-        if hasattr(self,"_zebra_listbox"): self._zebra_listbox()
+        del self.rows[idx]
+        self.cur_index = None
+        self.render_left_list()
+        self.on_clear()
         self._focus_name1() # カーソルを品目名1へ
         messagebox.showinfo("情報","削除しました")
 
@@ -821,12 +906,7 @@ class App(tk.Tk):
 
         row = self._collect_form_row()
         self.rows[idx] = row
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, self._disp_text(row))
-        try:
-            self.listbox.selection_set(idx); self.listbox.see(idx)
-        except: pass
-        if hasattr(self, "_zebra_listbox"): self._zebra_listbox()
+        self.render_left_list(keep_index=idx)
         self._focus_name1() # カーソルを品目名1へ
         messagebox.showinfo("情報","変更しました")
 
@@ -837,6 +917,7 @@ class App(tk.Tk):
             if csvkey in self.vars: self.vars[csvkey].set("")
         self.cur_index=None
         dept = (self.settings or {}).get("department","資材")
+        self.attach_files = []; self._attachments_refresh_ui() # 添付ファイル
         for _,_,k in self.FIELDS:
             m = self.schema_get_mode(dept, k)
             if m in ("fixed","label"):
@@ -876,12 +957,11 @@ class App(tk.Tk):
                 for row in rdr: tmp.append({k:row.get(k,"") for k in cols})
         except Exception as e:
             messagebox.showerror("エラー",f"取込失敗: {e}"); return
-        self.rows=tmp; self.listbox.delete(0,"end")
-        for r in self.rows:
-            disp_full=r.get("品目名1") or r.get("品目名2") or r.get("品目ｺｰﾄﾞ") or "(無題)"
-            self.listbox.insert("end",trunc31(disp_full))
-        self.cur_index=None; self.on_clear(); messagebox.showinfo("情報","取込しました")
-        # self._zebra_listbox()
+        self.rows=tmp
+        self.render_left_list()
+        self.cur_index=None
+        self.on_clear()
+        messagebox.showinfo("情報","取込しました")
         if hasattr(self, "_zebra_listbox"): self._zebra_listbox()
 
     # 採番依頼
